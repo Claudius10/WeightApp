@@ -13,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.*;
 
+
 public class FoodTabController {
 
     @FXML
@@ -53,7 +54,7 @@ public class FoodTabController {
         alimentsTableView.setItems(aliments);
 
     }
-
+    int i;
     // Meals //
 
     public void newMealWindow() throws IOException {
