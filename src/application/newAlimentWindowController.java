@@ -34,8 +34,7 @@ public class newAlimentWindowController extends FoodTabController {
         );
         ObservableList<Aliment> newAlimentList = FXCollections.observableArrayList();
         newAlimentList.add(aliment);
-
-
+        
         saveAliment(newAlimentList,false);
         loadAliments();
     }
