@@ -31,7 +31,7 @@ public class FoodTabController {
     protected Label alimentsLabel;
 
     @FXML
-    protected Button deleteButton, refreshButton, newButton, newMealWindow;
+    protected Button deleteButton, newButton, newMealWindow;
 
     @FXML
     protected TableView<Aliment> alimentsTableView;
@@ -73,8 +73,6 @@ public class FoodTabController {
     // Meals //
     // Aliments //
 
-    boolean bool = true;
-
     public void newAlimentWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("newAlimentWindow.fxml"));
         Parent root = loader.load();
@@ -89,10 +87,8 @@ public class FoodTabController {
     }
 
     public void deleteAliment() {
-       /// System.out.println(alimentsTableView.getSelectionModel().getSelectedItem());
         aliments.remove(alimentsTableView.getSelectionModel().getSelectedItem());
         saveAliment(aliments,true);
-
     }
 
     public void saveAliment(ObservableList<Aliment> aliments, boolean remake) {
