@@ -73,6 +73,8 @@ public class FoodTabController {
     // Meals //
     // Aliments //
 
+    boolean bool = true;
+
     public void newAlimentWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("newAlimentWindow.fxml"));
         Parent root = loader.load();
@@ -154,7 +156,7 @@ public class FoodTabController {
         int ALIMENT_PROTEIN = 4;
         int ALIMENT_FIBER = 5;
 
-        BufferedReader fileReader = null;
+        BufferedReader fileReader;
 
         try {
 
@@ -164,7 +166,7 @@ public class FoodTabController {
 
                 fileReader = new BufferedReader(new FileReader("aliments.csv"));
                 fileReader.readLine();
-                String line = "";
+                String line;
 
                 while ((line = fileReader.readLine()) != null) {
                     String[] tokens = line.split(COMMA_DELIMITER);
