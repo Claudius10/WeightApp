@@ -12,9 +12,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.*;
-import java.lang.reflect.Array;
-import java.nio.file.Path;
-import java.util.Objects;
 
 public class FoodTabController {
 
@@ -53,12 +50,12 @@ public class FoodTabController {
         alimentsFiberCol.setCellValueFactory(new PropertyValueFactory<>("fiber"));
 
         loadAliments();
-
         alimentsTableView.setItems(aliments);
 
     }
 
     // Meals //
+
     public void newMealWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("newMealWindow.fxml"));
         Parent root = loader.load();
@@ -71,6 +68,7 @@ public class FoodTabController {
         stage.show();
     }
     // Meals //
+
     // Aliments //
 
     public void newAlimentWindow() throws IOException {
