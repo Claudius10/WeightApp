@@ -41,6 +41,7 @@ public class FoodTabController {
     protected TableColumn<Aliment, Double> alimentsKcalCol, alimentsFatCol, alimentsCarbsCol, alimentsProteinCol, alimentsFiberCol;
 
     protected static ObservableList<Aliment> aliments = FXCollections.observableArrayList();
+    int test =0;
 
     public void initialize() {
         alimentsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
