@@ -19,9 +19,7 @@ public class newAlimentWindowController extends FoodTabController {
     @FXML
     protected Button addButton;
 
-    public void initialize() {
-
-    }
+    public void initialize() {}
 
     public void addAliment() {
         Aliment aliment =  new Aliment(

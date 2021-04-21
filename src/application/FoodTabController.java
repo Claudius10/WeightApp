@@ -13,7 +13,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.*;
 
-
 public class FoodTabController {
 
     @FXML
@@ -41,7 +40,6 @@ public class FoodTabController {
     protected TableColumn<Aliment, Double> alimentsKcalCol, alimentsFatCol, alimentsCarbsCol, alimentsProteinCol, alimentsFiberCol;
 
     protected static ObservableList<Aliment> aliments = FXCollections.observableArrayList();
-    int test =0;
 
     public void initialize() {
         alimentsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -55,7 +53,6 @@ public class FoodTabController {
         alimentsTableView.setItems(aliments);
 
     }
-    int i;
     // Meals //
 
     public void newMealWindow() throws IOException {
@@ -101,13 +98,12 @@ public class FoodTabController {
 
         try {
 
-            File newFIle = new File("aliments.csv");
+            File newFile = new File("aliments.csv");
 
-
-            if(newFIle.exists() && !remake){
+            if (newFile.exists() && !remake) {
                 //Update current file
                 fw = new FileWriter("aliments.csv",true);
-            } else{
+            } else {
                 fw = new FileWriter("aliments.csv");
                 fw.append(FILE_HEADER);
             }
@@ -156,9 +152,9 @@ public class FoodTabController {
 
         try {
 
-            File newFIle = new File("aliments.csv");
+            File newFile = new File("aliments.csv");
 
-            if(newFIle.exists()) {
+            if (newFile.exists()) {
 
                 fileReader = new BufferedReader(new FileReader("aliments.csv"));
                 fileReader.readLine();
