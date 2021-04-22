@@ -1,6 +1,7 @@
 package application;
 
 import application.domain.Aliment;
+import application.domain.Meal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -38,6 +39,9 @@ public class FoodTabController {
 
     @FXML
     protected TableColumn<Aliment, Double> alimentsKcalCol, alimentsFatCol, alimentsCarbsCol, alimentsProteinCol, alimentsFiberCol;
+
+    @FXML
+    protected ListView<Meal> mealTestListView;
 
     protected static ObservableList<Aliment> aliments = FXCollections.observableArrayList();
 

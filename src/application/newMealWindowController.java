@@ -1,6 +1,8 @@
 package application;
 
 import application.domain.Aliment;
+import application.domain.Meal;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,19 +12,19 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class newMealWindowController  {
+public class newMealWindowController extends Meal {
 
     @FXML
     private AnchorPane newMealPane;
 
     @FXML
-    private TextField alimentWeight;
-
-    @FXML
     private ComboBox<Aliment> alimentComboBox;
 
     @FXML
-    private ListView<?> currentAliments;
+    private TextField alimentWeight;
+
+    @FXML
+    private ListView<Aliment> selectedAliments;
 
     @FXML
     private Button addAlimentToMeal, deleteAlimentFromMeal, mealFinishButton;
@@ -33,10 +35,31 @@ public class newMealWindowController  {
     @FXML
     private TextField mealNameTextField;
 
+    //This is for meal obsHashMap
+    ObservableList<Aliment> alimentsForMeal = FXCollections.observableArrayList();
+
     public void initialize() {
     }
 
     public void setAliments(ObservableList<Aliment> aliments) {
         alimentComboBox.getItems().addAll(aliments);
+    }
+
+    public void addAliment() {
+        double alimentWeightHelper = Double.parseDouble(alimentWeight.getText()) / 100;
+
+        String name = alimentComboBox.getValue().getName();
+        double weight = alimentComboBox.getValue().getWeight() * alimentWeightHelper;
+        double calories = alimentComboBox.getValue().getCalories() * alimentWeightHelper;
+        double fat = alimentComboBox.getValue().getFat() * alimentWeightHelper;
+        double carbs = alimentComboBox.getValue().getCarbohydrate() * alimentWeightHelper;
+        double protein = alimentComboBox.getValue().getProtein() * alimentWeightHelper;
+        double fiber = alimentComboBox.getValue().getFiber() * alimentWeightHelper;
+
+        Aliment aliment = new Aliment(name, calories, fat, carbs, protein, fiber);
+        aliment.setWeight(weight);
+
+        alimentsForMeal.add(aliment);
+        selectedAliments.setItems(alimentsForMeal);
     }
 }

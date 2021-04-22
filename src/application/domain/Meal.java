@@ -1,67 +1,42 @@
 package application.domain;
 
+import application.domain.Aliment;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class Meal {
 
-    ArrayList<Aliment> meal = new ArrayList<>();
+    ObservableMap<String, ObservableList<Aliment>> meal = FXCollections.observableHashMap();
 
-    public void addAliment(Aliment aliment, double weight) {
-        String name = aliment.getName();
-        double finalWeight = weight * 100;
-        double calories = aliment.getCalories() * weight;
-        double fat = aliment.getFat() * weight;
-        double carbs = aliment.getCarbohydrate() * weight;
-        double prot = aliment.getProtein() * weight;
-        double fiber = aliment.getFiber() * weight;
+    public void add(String mealName, ObservableList<Aliment> aliments) {
 
-        this.meal.add(new Aliment(name, calories, fat, carbs, prot, fiber));
+        meal.putIfAbsent(mealName, aliments);
+
     }
 
-    public void printMealContents() {
-        this.meal.stream().forEach(aliment -> {
-            System.out.println(aliment);
-        });
-        // same as this.food.stream().forEach(System.out::println);
+    /*
+    public Collection<ArrayList<Aliment>> printMealContents() {
+        return meals.values();
     }
 
-    public double getFat() {
-        double totalFat = this.meal.stream()
-                .map(aliment -> aliment.getFat())
-                .reduce(0.0, (previousSum, aliment) -> previousSum + aliment);
-        return totalFat;
+    public void printMealContents1() {
+        for (ArrayList<Aliment> aliments : this.meals.values()) {
+            System.out.println(aliments);
+        }
     }
 
-    public double getCarbs() {
-        double totalCarbs = this.meal.stream()
-                .map(aliment -> aliment.getCarbohydrate())
-                .reduce(0.0, (previousSum, aliment) -> previousSum + aliment);
-        return totalCarbs;
+    public void printMealContents2() {
+        for (ArrayList<Aliment> aliments : this.meals.values()) {
+            aliments.stream()
+                    .map(aliment -> aliment.getName() + " " + aliment.getWeight() + " " + aliment.getCalories())
+                    .forEach(aliment -> System.out.println(aliment));
+        }
     }
 
-    public double getProtein() {
-        double totalProtein = this.meal.stream()
-                .map(aliment -> aliment.getProtein())
-                .reduce(0.0, (previousSum, aliment) -> previousSum + aliment);
-        return totalProtein;
-    }
-
-    public double getFiber() {
-        double totalFiber = this.meal.stream()
-                .map(aliment -> aliment.getFiber())
-                .reduce(0.0, (previousSum, aliment) -> previousSum + aliment);
-        return totalFiber;
-    }
-
-    public double getCalories() {
-        double totalCalories = this.meal.stream()
-                .map(aliment -> aliment.getCalories())
-                .reduce(0.0, (previousSum, aliment) -> previousSum + aliment);
-        return totalCalories;
-    }
-
-    public String getNutriValues() {
-        return "Total calories: " + getCalories();
-    }
-
+     */
 }

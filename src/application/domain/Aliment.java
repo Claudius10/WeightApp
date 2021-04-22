@@ -8,11 +8,6 @@ public class Aliment {
     private double weight;
     private double calories, fat, carbohydrate, protein, fiber;
 
-   /* public Aliment(String name, double weight, double calories, double fat, double carbohydrate, double protein, double fiber) {
-       this(name, calories, fat, carbohydrate, protein, fiber);
-       this.weight = weight;
-    }*/
-
     public Aliment(String name, double calories, double fat, double carbohydrate, double protein, double fiber) {
         this.name = name;
         this.weight = 100;
@@ -78,7 +73,6 @@ public class Aliment {
     public void setFiber(double fiber) {
         this.fiber = fiber;
     }
-
 
     @Override
     public boolean equals(Object o) {
