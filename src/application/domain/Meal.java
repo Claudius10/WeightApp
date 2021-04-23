@@ -1,25 +1,19 @@
 package application.domain;
 
-import application.domain.Aliment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class Meal {
 
-    ObservableMap<String, ObservableList<Aliment>> meal = FXCollections.observableHashMap();
 
-    public void add(String mealName, ObservableList<Aliment> aliments) {
-
-        meal.putIfAbsent(mealName, aliments);
+/*
+    public void getMealContents() {
 
     }
 
-    /*
     public Collection<ArrayList<Aliment>> printMealContents() {
         return meals.values();
     }
@@ -37,6 +31,12 @@ public class Meal {
                     .forEach(aliment -> System.out.println(aliment));
         }
     }
+
+     public double getFat() {
+        double totalFat = this.meal.stream()
+                .map(aliment -> aliment.getFat())
+                .reduce(0.0, (previousSum, aliment) -> previousSum + aliment);
+        return totalFat;
 
      */
 }

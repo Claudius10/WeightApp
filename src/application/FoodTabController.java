@@ -43,7 +43,14 @@ public class FoodTabController {
     @FXML
     protected ListView<Meal> mealTestListView;
 
+    //@FXML
+    //protected TreeTableView<> mealTreeTableView;
+
+    //@FXML
+    //protected TreeTableColumn<> mealNameCol, mealKcalCol, mealFatCol, mealCarbsCol, mealProteinCol, mealFiberCol;
+
     protected static ObservableList<Aliment> aliments = FXCollections.observableArrayList();
+    protected static ObservableList<Meal> meals = FXCollections.observableArrayList();
 
     public void initialize() {
         alimentsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));

@@ -15,25 +15,25 @@ import javafx.scene.layout.AnchorPane;
 public class newMealWindowController extends Meal {
 
     @FXML
-    private AnchorPane newMealPane;
+    protected AnchorPane newMealPane;
 
     @FXML
-    private ComboBox<Aliment> alimentComboBox;
+    protected ComboBox<Aliment> alimentComboBox;
 
     @FXML
-    private TextField alimentWeight;
+    protected TextField alimentWeight;
 
     @FXML
-    private ListView<Aliment> selectedAliments;
+    protected ListView<Aliment> selectedAliments;
 
     @FXML
-    private Button addAlimentToMeal, deleteAlimentFromMeal, mealFinishButton;
+    protected Button addAlimentToMeal, deleteAlimentFromMeal, mealFinishButton;
 
     @FXML
-    private Label mealCalories, mealFat, mealCarbs, mealProtein, mealFiber;
+    protected Label mealCalories, mealFat, mealCarbs, mealProtein, mealFiber;
 
     @FXML
-    private TextField mealNameTextField;
+    protected TextField mealNameTextField;
 
     //This is for meal obsHashMap
     ObservableList<Aliment> alimentsForMeal = FXCollections.observableArrayList();
@@ -62,4 +62,6 @@ public class newMealWindowController extends Meal {
         alimentsForMeal.add(aliment);
         selectedAliments.setItems(alimentsForMeal);
     }
+
+
 }
