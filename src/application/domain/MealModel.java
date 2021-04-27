@@ -4,22 +4,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import java.util.ArrayList;
-
 public class MealModel {
 
-   private ObservableMap<String, ObservableList<Aliment>> MealModel;
-
+   private ObservableMap<String, Aliment> MealModel;
    public MealModel() {
        this.MealModel = FXCollections.observableHashMap();
    }
 
-   public void add(String name, ObservableList<Aliment> aliments) {
-       this.MealModel.putIfAbsent(name, aliments);
+   public void add(String name, Aliment aliment) {
+       this.MealModel.put(name, aliment);
    }
 
-   public ObservableList<Aliment> aliments(String name) {
+   public Aliment aliments(String name) {
        return this.MealModel.get(name);
+   }
+
+   public String alimentGetName(String name) {
+       return this.aliments(name).getName();
    }
 
    public String getMealName(String name) {

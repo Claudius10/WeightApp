@@ -2,6 +2,7 @@ package application;
 
 import application.domain.Aliment;
 import application.domain.Meal;
+import application.domain.MealModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,7 +13,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class newMealWindowController extends Meal {
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class newMealWindowController {
 
     @FXML
     protected AnchorPane newMealPane;
@@ -37,6 +42,7 @@ public class newMealWindowController extends Meal {
 
     //This is for meal obsHashMap
     ObservableList<Aliment> alimentsForMeal = FXCollections.observableArrayList();
+    MealModel meal = new MealModel();
 
     public void initialize() {
     }
@@ -56,12 +62,19 @@ public class newMealWindowController extends Meal {
         double protein = alimentComboBox.getValue().getProtein() * alimentWeightHelper;
         double fiber = alimentComboBox.getValue().getFiber() * alimentWeightHelper;
 
+       /*
         Aliment aliment = new Aliment(name, calories, fat, carbs, protein, fiber);
         aliment.setWeight(weight);
 
         alimentsForMeal.add(aliment);
         selectedAliments.setItems(alimentsForMeal);
+
+        meal.add(mealNameTextField.getText(), aliment);
+
+
+        */
     }
+
 
 
 }

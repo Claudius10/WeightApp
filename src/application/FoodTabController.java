@@ -2,6 +2,7 @@ package application;
 
 import application.domain.Aliment;
 import application.domain.Meal;
+import application.domain.MealModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,8 +14,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.*;
+import java.sql.*;
 
-public class FoodTabController {
+public class FoodTabController extends DOA {
 
     @FXML
     protected AnchorPane app, foodTab, foodButtonBar;
@@ -41,18 +43,39 @@ public class FoodTabController {
     protected TableColumn<Aliment, Double> alimentsKcalCol, alimentsFatCol, alimentsCarbsCol, alimentsProteinCol, alimentsFiberCol;
 
     @FXML
-    protected ListView<Meal> mealTestListView;
+    protected TreeTableView<MealModel> mealTreeTableView;
 
-    //@FXML
-    //protected TreeTableView<> mealTreeTableView;
+    @FXML
+    protected TreeTableColumn<MealModel, String> mealNameCol;
 
-    //@FXML
-    //protected TreeTableColumn<> mealNameCol, mealKcalCol, mealFatCol, mealCarbsCol, mealProteinCol, mealFiberCol;
+    @FXML
+    protected TreeTableColumn<MealModel, Double> mealKcalCol, mealFatCol, mealCarbsCol, mealProteinCol, mealFiberCol;
+
+    TreeItem<String> mealRoot = new TreeItem<>("Meals");
+
+    TreeItem<String> mealName = new TreeItem<>();
+    TreeItem<String> mealCalories = new TreeItem<>();
+    TreeItem<String> mealFat = new TreeItem<>();
+    TreeItem<String> mealCarbs = new TreeItem<>();
+    TreeItem<String> mealProtein = new TreeItem<>();
+    TreeItem<String> mealFiber = new TreeItem<>();
+
+    TreeItem<String> alimentsRoot = new TreeItem<>("Aliments");
+
+    TreeItem<String> alimentName = new TreeItem<>();
+    TreeItem<String> alimentCalories = new TreeItem<>();
+    TreeItem<String> alimentFat = new TreeItem<>();
+    TreeItem<String> alimentCarbs = new TreeItem<>();
+    TreeItem<String> alimentProtein = new TreeItem<>();
+    TreeItem<String> alimentFiber = new TreeItem<>();
 
     protected static ObservableList<Aliment> aliments = FXCollections.observableArrayList();
-    protected static ObservableList<Meal> meals = FXCollections.observableArrayList();
+    protected static ObservableList<Aliment> alimentsInMeal = FXCollections.observableArrayList();
+    protected static MealModel meal = new MealModel();
 
-    public void initialize() {
+    public FoodTabController() throws Exception {}
+
+    public void initialize() throws SQLException {
         alimentsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         alimentsKcalCol.setCellValueFactory(new PropertyValueFactory<>("calories"));
         alimentsFatCol.setCellValueFactory(new PropertyValueFactory<>("fat"));
@@ -60,9 +83,10 @@ public class FoodTabController {
         alimentsProteinCol.setCellValueFactory(new PropertyValueFactory<>("protein"));
         alimentsFiberCol.setCellValueFactory(new PropertyValueFactory<>("fiber"));
 
-        loadAliments();
-        alimentsTableView.setItems(aliments);
+        alimentsTableView.setItems(alimentList(aliments));
 
+        mealRoot.getChildren().setAll(mealName, mealCalories, mealFat, mealCarbs, mealProtein, mealFiber);
+        alimentsRoot.getChildren().setAll(alimentName, alimentCalories, alimentFat, alimentCarbs, alimentProtein, alimentFiber);
     }
     // Meals //
 
@@ -71,7 +95,7 @@ public class FoodTabController {
         Parent root = loader.load();
 
         newMealWindowController mealWindowController = loader.getController();
-        mealWindowController.setAliments(alimentObservableList());
+        //mealWindowController.setAliments();
 
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
@@ -80,6 +104,7 @@ public class FoodTabController {
     // Meals //
 
     // Aliments //
+
 
     public void newAlimentWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("newAlimentWindow.fxml"));
@@ -90,99 +115,54 @@ public class FoodTabController {
         stage.show();
     }
 
-    public ObservableList<Aliment> alimentObservableList() {
+    protected void alimentToDB(String name, String calories, String fat, String carbs, String protein, String fiber) throws SQLException {
+        int weight = 100;
+        //connect to database
+
+        PreparedStatement myStmt = connection.prepareStatement("insert into aliments "
+                + " (name, weight, calories, fat, carbs, protein, fiber)"
+                + " values (?, ?, ?, ?, ?, ?, ?)");
+
+        myStmt.setString(1, name);
+        myStmt.setDouble(2, weight);
+        myStmt.setDouble(3, Double.parseDouble(calories));
+        myStmt.setDouble(4, Double.parseDouble(fat));
+        myStmt.setDouble(5, Double.parseDouble(carbs));
+        myStmt.setDouble(6, Double.parseDouble(protein));
+        myStmt.setDouble(7, Double.parseDouble(fiber));
+
+        myStmt.executeUpdate();
+    }
+
+    protected ObservableList<Aliment> alimentList(ObservableList<Aliment> aliments) throws SQLException {
+        aliments.clear();
+        Statement myStmt = connection.createStatement();
+        ResultSet myRs = myStmt.executeQuery("select * from aliments");
+
+        while (myRs.next()) {
+            int id = myRs.getInt("id");
+            String name = myRs.getString("name");
+            double calories = myRs.getDouble("calories");
+            double fat = myRs.getDouble("fat");
+            double carbs = myRs.getDouble("carbs");
+            double protein = myRs.getDouble("protein");
+            double fiber = myRs.getDouble("fiber");
+            Aliment aliment = new Aliment(name, calories, fat, carbs, protein, fiber);
+            aliment.setId(id);
+            aliments.add(aliment);
+        }
         return aliments;
     }
 
-    public void deleteAliment() {
-        aliments.remove(alimentsTableView.getSelectionModel().getSelectedItem());
-        saveAliment(aliments,true);
+    public void deleteAliment() throws SQLException {
+        Aliment aliment = alimentsTableView.getSelectionModel().getSelectedItem();
+        int id = aliment.getId();
+        PreparedStatement myStmt = connection.prepareStatement("delete from aliments where id=?");
+        myStmt.setInt(1, id);
+        myStmt.executeUpdate();
+        alimentList(aliments);
     }
 
-    public void saveAliment(ObservableList<Aliment> aliments, boolean remake) {
-
-        String COMMA_DELIMITER = ",";
-        String NEW_LINE_SEPARATOR = "\n";
-        String FILE_HEADER = "aliment,calories,fat,carbs,protein,fiber";
-
-        FileWriter fw = null;
-
-        try {
-
-            File newFile = new File("aliments.csv");
-
-            if (newFile.exists() && !remake) {
-                //Update current file
-                fw = new FileWriter("aliments.csv",true);
-            } else {
-                fw = new FileWriter("aliments.csv");
-                fw.append(FILE_HEADER);
-            }
-
-            for (Aliment aliment : aliments) {
-                fw.append(NEW_LINE_SEPARATOR);
-                fw.append(String.valueOf(aliment.getName()));
-                fw.append(COMMA_DELIMITER);
-                fw.append(String.valueOf(aliment.getCalories()));
-                fw.append(COMMA_DELIMITER);
-                fw.append(String.valueOf(aliment.getFat()));
-                fw.append(COMMA_DELIMITER);
-                fw.append(String.valueOf(aliment.getCarbohydrate()));
-                fw.append(COMMA_DELIMITER);
-                fw.append(String.valueOf(aliment.getProtein()));
-                fw.append(COMMA_DELIMITER);
-                fw.append(String.valueOf(aliment.getFiber()));
-           }
-        } catch (Exception e) {
-            System.out.println("Error writing to file");
-            e.printStackTrace();
-        } finally {
-            try {
-                assert fw != null;
-                fw.flush();
-                fw.close();
-            } catch (IOException e) {
-                System.out.println("Error while flushing/closing FileWriter.");
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void loadAliments()  {
-
-        aliments.clear();
-        String COMMA_DELIMITER = ",";
-        int ALIMENT_NAME = 0;
-        int ALIMENT_CALORIES = 1;
-        int ALIMENT_FAT = 2;
-        int ALIMENT_CARBS = 3;
-        int ALIMENT_PROTEIN = 4;
-        int ALIMENT_FIBER = 5;
-
-        BufferedReader fileReader;
-
-        try {
-
-            File newFile = new File("aliments.csv");
-
-            if (newFile.exists()) {
-
-                fileReader = new BufferedReader(new FileReader("aliments.csv"));
-                fileReader.readLine();
-                String line;
-
-                while ((line = fileReader.readLine()) != null) {
-                    String[] tokens = line.split(COMMA_DELIMITER);
-                    Aliment newAliment = new Aliment(String.valueOf(tokens[ALIMENT_NAME]), Double.parseDouble(tokens[ALIMENT_CALORIES]), Double.parseDouble(tokens[ALIMENT_FAT]), Double.parseDouble(tokens[ALIMENT_CARBS]), Double.parseDouble(tokens[ALIMENT_PROTEIN]), Double.parseDouble(tokens[ALIMENT_FIBER]));
-                    aliments.add(newAliment);
-                }
-                fileReader.close();
-            }
-        } catch (Exception e) {
-            System.out.println("Error reading aliments from CSV file");
-            e.printStackTrace();
-        }
-    }
     // Aliments //
 }
 

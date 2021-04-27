@@ -8,6 +8,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
+import java.io.FileInputStream;
+import java.sql.*;
+import java.util.Properties;
+import java.util.Random;
+
 public class newAlimentWindowController extends FoodTabController {
 
     @FXML
@@ -19,21 +24,15 @@ public class newAlimentWindowController extends FoodTabController {
     @FXML
     protected Button addButton;
 
-    public void initialize() {}
+    public newAlimentWindowController() throws Exception {
+    }
 
-    public void addAliment() {
-        Aliment aliment =  new Aliment(
-                newAlimentSetName.getText(),
-                Double.parseDouble(newAlimentSetCal.getText()),
-                Double.parseDouble(newAlimentSetFat.getText()),
-                Double.parseDouble(newAlimentSetCarbs.getText()),
-                Double.parseDouble(newAlimentSetProtein.getText()),
-                Double.parseDouble(newAlimentSetFiber.getText())
-        );
-        ObservableList<Aliment> newAlimentList = FXCollections.observableArrayList();
-        newAlimentList.add(aliment);
-        
-        saveAliment(newAlimentList,false);
-        loadAliments();
+    public void initialize() {
+    }
+
+    public void addAliment() throws Exception {
+        alimentToDB(newAlimentSetName.getText(), newAlimentSetCal.getText(), newAlimentSetFat.getText(),
+                newAlimentSetCarbs.getText(), newAlimentSetProtein.getText(), newAlimentSetFiber.getText());
+        alimentList(aliments);
     }
 }

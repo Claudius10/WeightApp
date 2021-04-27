@@ -11,11 +11,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Objects;
+
 public class WeightApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("foodTab.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("foodTab.fxml")));
         Scene main = new Scene(root);
         primaryStage.setScene(main);
         primaryStage.setTitle("App");
@@ -25,20 +31,8 @@ public class WeightApp extends Application {
     }
 
     public static void main(String[] args) {
-        //launch(WeightApp.class);
-        Aliment pan = new Aliment("pan", 200, 10, 45, 10 , 5);
-        Aliment pan2 = new Aliment("pan2", 200, 10, 45, 10 , 5);
-        ObservableList<Aliment> alimentsForMeal = FXCollections.observableArrayList();
-        alimentsForMeal.add(pan);
-        alimentsForMeal.add(pan2);
 
-        MealModel meal = new MealModel();
-        meal.add("meal1", alimentsForMeal);
-
-
-        System.out.println(meal.getMealName("meal1") + meal.aliments("meal1"));
-        System.out.println(meal.aliments("meal1"));
-
+        launch(WeightApp.class);
 
     }
 }
