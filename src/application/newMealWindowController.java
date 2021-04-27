@@ -1,7 +1,6 @@
 package application;
 
 import application.domain.Aliment;
-import application.domain.Meal;
 import application.domain.MealModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,10 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class newMealWindowController {
 

@@ -1,7 +1,6 @@
 package application;
 
 import application.domain.Aliment;
-import application.domain.Meal;
 import application.domain.MealModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -102,9 +101,7 @@ public class FoodTabController extends DOA {
         stage.show();
     }
     // Meals //
-
     // Aliments //
-
 
     public void newAlimentWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("newAlimentWindow.fxml"));
@@ -117,7 +114,6 @@ public class FoodTabController extends DOA {
 
     protected void alimentToDB(String name, String calories, String fat, String carbs, String protein, String fiber) throws SQLException {
         int weight = 100;
-        //connect to database
 
         PreparedStatement myStmt = connection.prepareStatement("insert into aliments "
                 + " (name, weight, calories, fat, carbs, protein, fiber)"
@@ -130,7 +126,6 @@ public class FoodTabController extends DOA {
         myStmt.setDouble(5, Double.parseDouble(carbs));
         myStmt.setDouble(6, Double.parseDouble(protein));
         myStmt.setDouble(7, Double.parseDouble(fiber));
-
         myStmt.executeUpdate();
     }
 
@@ -162,7 +157,6 @@ public class FoodTabController extends DOA {
         myStmt.executeUpdate();
         alimentList(aliments);
     }
-
     // Aliments //
 }
 
