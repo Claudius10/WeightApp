@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public class Aliment {
 
+    private int id;
     private String name;
     private double weight;
     private double calories, fat, carbohydrate, protein, fiber;
@@ -16,6 +17,14 @@ public class Aliment {
         this.carbohydrate = carbohydrate;
         this.protein = protein;
         this.fiber = fiber;
+    }
+
+    public int getId () {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -89,7 +98,7 @@ public class Aliment {
 
     @Override
     public String toString() {
-        return this.name + "," + this.weight + "," + this.calories + "," + this.fat + "," + this.carbohydrate + "," + this.protein + "," + this.fiber;
+        return this.id + "," + this.name + "," + this.weight + "," + this.calories + "," + this.fat + "," + this.carbohydrate + "," + this.protein + "," + this.fiber;
     }
 }
 
