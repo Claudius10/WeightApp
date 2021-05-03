@@ -6,8 +6,7 @@ public class Aliment {
 
     private int id;
     private String name;
-    private double weight;
-    private double calories, fat, carbohydrate, protein, fiber;
+    private double weight, calories, fat, carbohydrate, protein, fiber;
 
     public Aliment(String name, double calories, double fat, double carbohydrate, double protein, double fiber) {
         this.name = name;
@@ -98,7 +97,7 @@ public class Aliment {
 
     @Override
     public String toString() {
-        return this.id + "," + this.name + "," + this.weight + "," + this.calories + "," + this.fat + "," + this.carbohydrate + "," + this.protein + "," + this.fiber;
+        return this.name + "," + this.weight + "," + this.calories + "," + this.fat + "," + this.carbohydrate + "," + this.protein + "," + this.fiber;
     }
 }
 

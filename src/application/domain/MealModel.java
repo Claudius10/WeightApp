@@ -2,35 +2,62 @@ package application.domain;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 
 public class MealModel {
 
-   private ObservableMap<String, Aliment> MealModel;
-   public MealModel() {
-       this.MealModel = FXCollections.observableHashMap();
-   }
+    private String mealName;
+    ObservableList<Aliment> alimentList;
 
-   public void add(String name, Aliment aliment) {
-       this.MealModel.put(name, aliment);
-   }
+    public MealModel(String name) {
+        this.mealName = name;
+        this.alimentList = FXCollections.observableArrayList();
+    }
 
-   public Aliment aliments(String name) {
-       return this.MealModel.get(name);
-   }
+    public void add(Aliment aliment) {
+        alimentList.addAll(aliment);
+    }
 
-   public String alimentGetName(String name) {
-       return this.aliments(name).getName();
-   }
+    public ObservableList<Aliment> getAliments() {
+       return this.alimentList;
+    }
 
-   public String getMealName(String name) {
-       for (String key : MealModel.keySet()) {
-           if (name.matches(key)) {
-               return key;
-           }
-       }
-       return "Meal not found";
-   }
+    public String getName() {
+        return this.mealName;
+    }
 
+    public double getWeight() {
+        return this.alimentList.stream()
+                .map(Aliment::getWeight)
+                .reduce(0.0, Double::sum);
+    }
 
+    public double getCalories() {
+        return this.alimentList.stream()
+                .map(Aliment::getCalories)
+                .reduce(0.0, Double::sum);
+    }
+
+    public double getFat() {
+        return this.alimentList.stream()
+                .map(Aliment::getFat)
+                .reduce(0.0, Double::sum);
+    }
+
+    public double getCarbohydrate() {
+        return this.alimentList.stream()
+                .map(Aliment::getCarbohydrate)
+                .reduce(0.0, Double::sum);
+    }
+
+    public double getProtein() {
+        return this.alimentList.stream()
+                .map(Aliment::getProtein)
+                .reduce(0.0, Double::sum);
+    }
+
+    public double getFiber() {
+        return this.alimentList.stream()
+                .map(Aliment::getFiber)
+                .reduce(0.0, Double::sum);
+    }
 }

@@ -25,7 +25,7 @@
                     <Button fx:id="deleteButton" layoutX="746.0" layoutY="5.0" mnemonicParsing="false" onAction="#deleteAliment" text="Delete" AnchorPane.rightAnchor="54.0" />
                     <Button fx:id="newButton" layoutX="798.0" layoutY="5.0" mnemonicParsing="false" onAction="#newAlimentWindow" text="New" AnchorPane.rightAnchor="8.0" />
                 </AnchorPane>
-                <TableView fx:id="alimentsTableView" layoutY="34.0" prefHeight="235.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="34.0">
+                <TableView fx:id="alimentsTableView" layoutY="34.0" prefHeight="235.0" prefWidth="863.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="34.0">
                     <columns>
                         <TableColumn fx:id="alimentsNameCol" prefWidth="141.0" text="Name" />
                         <TableColumn fx:id="alimentsKcalCol" prefWidth="141.0" text="Calories" />
@@ -46,14 +46,15 @@
                     </Label>
                     <Button fx:id="newMealWindow" layoutX="789.0" layoutY="5.0" mnemonicParsing="false" onAction="#newMealWindow" text="New" AnchorPane.rightAnchor="8.0" />
                 </AnchorPane>
-            <TreeTableView fx:id="mealTreeTableView" layoutY="303.0" prefHeight="236.0" prefWidth="870.0">
+            <TreeTableView fx:id="mealsTreeTableView" layoutX="1.0" layoutY="313.0" prefHeight="236.0" prefWidth="870.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
               <columns>
-                <TreeTableColumn fx:id="mealNameCol" prefWidth="75.0" text="Name" />
-                <TreeTableColumn fx:id="mealKcalCol" prefWidth="75.0" text="Calories" />
-                <TreeTableColumn fx:id="mealFatCol" prefWidth="75.0" text="Fat" />
-                <TreeTableColumn fx:id="mealCarbsCol" prefWidth="75.0" text="Carbohydrate" />
-                <TreeTableColumn fx:id="mealProteinCol" prefWidth="75.0" text="Protein" />
-                <TreeTableColumn fx:id="mealFiberCol" prefWidth="75.0" text="Fiber" />
+                <TreeTableColumn fx:id="nameCol" prefWidth="124.0" text="Name" />
+                <TreeTableColumn fx:id="weightCol" prefWidth="124.0" text="Weight" />
+                  <TreeTableColumn fx:id="kcalCol" prefWidth="124.0" text="Calories" />
+                  <TreeTableColumn fx:id="fatCol" prefWidth="124.0" text="Fat" />
+                  <TreeTableColumn fx:id="carbsCol" prefWidth="124.0" text="Carbohydrate" />
+                  <TreeTableColumn fx:id="proteinCol" prefWidth="124.0" text="Protein" />
+                  <TreeTableColumn fx:id="fiberCol" prefWidth="124.0" text="Fiber" />
               </columns>
             </TreeTableView>
             </AnchorPane>
