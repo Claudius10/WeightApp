@@ -11,7 +11,8 @@ public class WeightApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("foodTab.fxml")));
+
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("MainController.fxml")));
         Scene main = new Scene(root);
         primaryStage.setScene(main);
         primaryStage.setTitle("App");

@@ -5,7 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
-public class newAlimentWindowController extends FoodTabController {
+public class newAlimentWindowController extends MainController {
 
     @FXML
     protected Pane newAlimentPane;
@@ -16,7 +16,8 @@ public class newAlimentWindowController extends FoodTabController {
     @FXML
     protected Button addButton;
 
-    public void initialize() {
+    public void initialize() throws Exception {
+        System.out.println(alimentList(aliments));
     }
 
     public void addAliment() throws Exception {

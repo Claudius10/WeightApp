@@ -97,7 +97,7 @@ public class Aliment {
 
     @Override
     public String toString() {
-        return this.name + "," + this.weight + "," + this.calories + "," + this.fat + "," + this.carbohydrate + "," + this.protein + "," + this.fiber;
+        return this.name + "," + this.calories + "," + this.fat + "," + this.carbohydrate + "," + this.protein + "," + this.fiber;
     }
 }
 

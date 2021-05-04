@@ -6,10 +6,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-
 import java.sql.*;
 
-public class newMealWindowController extends FoodTabController {
+public class newMealWindowController extends MainController {
 
     @FXML
     protected AnchorPane newMealPane;
@@ -34,6 +33,7 @@ public class newMealWindowController extends FoodTabController {
 
     ObservableList<Aliment> alimentsForView = FXCollections.observableArrayList();
 
+
     public void initialize() {}
 
     public void setAliments(ObservableList<Aliment> aliments) {
@@ -51,40 +51,39 @@ public class newMealWindowController extends FoodTabController {
         double protein = alimentComboBox.getValue().getProtein() * alimentWeightHelper;
         double fiber = alimentComboBox.getValue().getFiber() * alimentWeightHelper;
 
-        DOA doa = new DOA();
-        CallableStatement myStmt1 = doa.connection.prepareCall("{call create_meal_table}");
-        myStmt1.execute();
+        Aliment aliment = new Aliment(name, calories, fat, carbs, protein, fiber);
+        aliment.setWeight(weight);
+        alimentsForView.add(aliment);
+        selectedAliments.setItems(alimentsForView);
 
-        //have to prevent SQL injections
-        PreparedStatement myStmt = doa.connection.prepareStatement("insert into meal_table "
+        DOA doa = new DOA();
+        CallableStatement myStmt = doa.connection.prepareCall("{call create_meal_table}");
+        myStmt.execute();
+
+        PreparedStatement myStmt1 = doa.connection.prepareStatement("insert into meal_table "
                 + " (aliment_name, weight, calories, fat, carbs, protein, fiber)"
                 + " values (?, ?, ?, ?, ?, ?, ?)");
 
-        myStmt.setString(1, name);
-        myStmt.setDouble(2, weight);
-        myStmt.setDouble(3, calories);
-        myStmt.setDouble(4, fat);
-        myStmt.setDouble(5, carbs);
-        myStmt.setDouble(6, protein);
-        myStmt.setDouble(7, fiber);
-        myStmt.execute();
-
-        Aliment aliment = new Aliment(name, calories, fat, carbs, protein, fiber);
-        aliment.setWeight(weight);
-
-        alimentsForView.add(aliment);
-        selectedAliments.setItems(alimentsForView);
+        myStmt1.setString(1, name);
+        myStmt1.setDouble(2, weight);
+        myStmt1.setDouble(3, calories);
+        myStmt1.setDouble(4, fat);
+        myStmt1.setDouble(5, carbs);
+        myStmt1.setDouble(6, protein);
+        myStmt1.setDouble(7, fiber);
+        myStmt1.execute();
     }
 
     public void finish() throws Exception {
         DOA doa = new DOA();
         PreparedStatement myStmt = doa.connection.prepareStatement("ALTER TABLE meal_table RENAME TO " + "`" + mealNameTextField.getText() + "`");
         myStmt.execute();
+
         selectedAliments.getItems().clear();
         mealNameTextField.clear();
+        refresh();
     }
 
     public void deleteAliment() {
-
     }
 }

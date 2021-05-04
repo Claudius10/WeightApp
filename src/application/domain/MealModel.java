@@ -60,4 +60,8 @@ public class MealModel {
                 .map(Aliment::getFiber)
                 .reduce(0.0, Double::sum);
     }
+
+    public String toString() {
+        return this.mealName + this.alimentList;
+    }
 }

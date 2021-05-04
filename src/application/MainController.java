@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.sql.*;
 
-public class FoodTabController {
+public class MainController {
 
     @FXML
     protected AnchorPane app, foodTab, foodButtonBar;
@@ -42,19 +42,16 @@ public class FoodTabController {
     @FXML
     protected TableColumn<Aliment, Double> alimentsKcalCol, alimentsFatCol, alimentsCarbsCol, alimentsProteinCol, alimentsFiberCol;
 
-    Meal meals = new Meal();
-    TreeItem root = new TreeItem<>();
+    @FXML
+    protected TreeTableView<Object> mealsTreeTableView = new TreeTableView<>();
 
     @FXML
-    protected TreeTableView mealsTreeTableView = new TreeTableView<>();
+    protected TreeTableColumn<Object, Object> nameCol, weightCol, kcalCol, fatCol, carbsCol, proteinCol, fiberCol;
 
-    @FXML
-    protected TreeTableColumn nameCol;
-
-    @FXML
-    protected TreeTableColumn weightCol, kcalCol, fatCol, carbsCol, proteinCol, fiberCol;
-
-    TreeItem mealsInTreeTableView = new TreeItem<>();
+    protected static Meal meals = new Meal();
+    protected static TreeItem<Object> rootTreeItem = new TreeItem<>();
+    protected static TreeItem<Object> mealsInTreeTableView = new TreeItem<>();
+    protected static TreeItem<Object> alimentsInTreeTableView = new TreeItem<>();
 
     protected static ObservableList<Aliment> aliments = FXCollections.observableArrayList();
 
@@ -77,20 +74,43 @@ public class FoodTabController {
         fiberCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("fiber"));
 
         setMeals();
-        mealsTreeTableView.setRoot(root);
+
+        mealsTreeTableView.setRoot(rootTreeItem);
         mealsTreeTableView.setShowRoot(false);
 
     }
 
     // Meals //
+    public void refresh() throws Exception {
+        rootTreeItem.getChildren().clear();
+        setMeals();
+    }
 
     public void setMeals() throws Exception {
         getMealsFromDB(meals);
         for (MealModel meals : meals.getMealList()) {
-            root.getChildren().addAll(mealsInTreeTableView = new TreeItem<>(meals));
+            rootTreeItem.getChildren().addAll(mealsInTreeTableView = new TreeItem<>(meals));
 
             for (Aliment aliments : meals.getAliments()) {
-                mealsInTreeTableView.getChildren().addAll(new TreeItem<>(aliments));
+                mealsInTreeTableView.getChildren().addAll(alimentsInTreeTableView = new TreeItem<>(aliments));
+            }
+        }
+    }
+
+    public void getMealsFromDB(Meal mealsDB) throws Exception {
+
+        DOA doa = new DOA();
+        DatabaseMetaData md = doa.connection.getMetaData();
+        String[] types = {"TABLE"};
+        ResultSet rs = md.getTables(null, null, "%", types);
+        while (rs.next()) {
+            String name = rs.getString("TABLE_NAME");
+            //bug: meal duplicates in meals FIXED
+            //bug 2: can't get meal names that have spaces in them
+            if (!name.equals("aliments") && !meals.getMealNames().contains(name)) {
+                MealModel meal = new MealModel(name);
+                getAlimentsFromDBForMeals(meal);
+                mealsDB.add(meal);
             }
         }
     }
@@ -116,37 +136,19 @@ public class FoodTabController {
         }
     }
 
-    public void getMealsFromDB(Meal mealsDB) throws Exception {
-
-        DOA doa = new DOA();
-        DatabaseMetaData md = doa.connection.getMetaData();
-        String[] types = {"TABLE"};
-        ResultSet rs = md.getTables(null, null, "%", types);
-        while (rs.next()) {
-            String name = rs.getString("TABLE_NAME");
-            //bug: meal duplicates in meals FIXED
-            //bug 2: can't get meal names that have spaces in them
-            if (!name.equals("aliments") && !meals.getMealNames().contains(name)) {
-                MealModel meal = new MealModel(name);
-                getAlimentsFromDBForMeals(meal);
-                mealsDB.add(meal);
-            }
-        }
-    }
-
     public void newMealWindow() throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("newMealWindow.fxml"));
         Parent root = loader.load();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
 
         newMealWindowController mealWindowController = loader.getController();
         mealWindowController.setAliments(aliments);
 
+
         DOA doa = new DOA();
         CallableStatement myStmt = doa.connection.prepareCall("{call delete_meal_table}");
-
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();
         stage.setOnCloseRequest(windowEvent -> {
             try {
                 myStmt.execute();
