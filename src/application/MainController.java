@@ -77,13 +77,24 @@ public class MainController {
 
         mealsTreeTableView.setRoot(rootTreeItem);
         mealsTreeTableView.setShowRoot(false);
-
     }
 
     // Meals //
     public void refresh() throws Exception {
         rootTreeItem.getChildren().clear();
         setMeals();
+    }
+
+    public void deleteMeal() throws Exception {
+        TreeItem<Object> selectedMeal = mealsTreeTableView.getSelectionModel().getSelectedItem();
+        MealModel meal = (MealModel) selectedMeal.getValue();
+        String mealName = meal.getName();
+
+        DOA doa = new DOA();
+        PreparedStatement myStmt = doa.connection.prepareStatement("DROP TABLE " + mealName);
+        myStmt.execute();
+
+        selectedMeal.getParent().getChildren().remove(selectedMeal);
     }
 
     public void setMeals() throws Exception {
@@ -98,7 +109,6 @@ public class MainController {
     }
 
     public void getMealsFromDB(Meal mealsDB) throws Exception {
-
         DOA doa = new DOA();
         DatabaseMetaData md = doa.connection.getMetaData();
         String[] types = {"TABLE"};
@@ -109,13 +119,13 @@ public class MainController {
             //bug 2: can't get meal names that have spaces in them
             if (!name.equals("aliments") && !meals.getMealNames().contains(name)) {
                 MealModel meal = new MealModel(name);
-                getAlimentsFromDBForMeals(meal);
+                getAlimentsFromDBForMeal(meal);
                 mealsDB.add(meal);
             }
         }
     }
 
-    public void getAlimentsFromDBForMeals(MealModel meal) throws Exception {
+    public void getAlimentsFromDBForMeal(MealModel meal) throws Exception {
         DOA doa = new DOA();
         Statement myStmt = doa.connection.createStatement();
         ResultSet myRs = myStmt.executeQuery("select * from " + meal.getName());
@@ -145,7 +155,6 @@ public class MainController {
 
         newMealWindowController mealWindowController = loader.getController();
         mealWindowController.setAliments(aliments);
-
 
         DOA doa = new DOA();
         CallableStatement myStmt = doa.connection.prepareCall("{call delete_meal_table}");
@@ -225,5 +234,3 @@ public class MainController {
 
     // Aliments //
 }
-
-

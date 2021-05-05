@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+
 import java.sql.*;
 
 public class newMealWindowController extends MainController {
@@ -26,13 +27,12 @@ public class newMealWindowController extends MainController {
     protected Button addAlimentToMeal, deleteAlimentFromMeal, mealFinishButton;
 
     @FXML
-    protected Label mealCalories, mealFat, mealCarbs, mealProtein, mealFiber;
+    protected Label totalFat, totalCarbs, totalProtein, totalKcal, totalWeight, totalFiber;
 
     @FXML
     protected TextField mealNameTextField;
 
     ObservableList<Aliment> alimentsForView = FXCollections.observableArrayList();
-
 
     public void initialize() {}
 
@@ -43,6 +43,7 @@ public class newMealWindowController extends MainController {
     public void addAliment() throws Exception {
         double alimentWeightHelper = Double.parseDouble(alimentWeight.getText()) / 100;
 
+        int id = alimentComboBox.getValue().getId();
         String name = alimentComboBox.getValue().getName();
         double weight = alimentComboBox.getValue().getWeight() * alimentWeightHelper;
         double calories = alimentComboBox.getValue().getCalories() * alimentWeightHelper;
@@ -53,6 +54,8 @@ public class newMealWindowController extends MainController {
 
         Aliment aliment = new Aliment(name, calories, fat, carbs, protein, fiber);
         aliment.setWeight(weight);
+        aliment.setId(id);
+
         alimentsForView.add(aliment);
         selectedAliments.setItems(alimentsForView);
 
@@ -74,6 +77,29 @@ public class newMealWindowController extends MainController {
         myStmt1.execute();
     }
 
+    public void deleteAlimentFromMeal() throws Exception {
+        Aliment aliment = selectedAliments.getSelectionModel().getSelectedItem();
+        String alimentName = aliment.getName();
+
+        DOA doa = new DOA();
+        Statement myStmt = doa.connection.createStatement();
+        ResultSet myRs = myStmt.executeQuery("select id from meal_table WHERE (`aliment_name` =" + "'" + alimentName + "');");
+
+        while (myRs.next()) {
+            int id = myRs.getInt("id");
+            aliment.setId(id);
+        }
+
+        int id = aliment.getId();
+
+        PreparedStatement myStmt2 = doa.connection.prepareStatement("delete from meal_table where id=?");
+        myStmt2.setInt(1, id);
+        myStmt2.execute();
+
+        alimentsForView.remove(aliment);
+        selectedAliments.refresh();
+    }
+
     public void finish() throws Exception {
         DOA doa = new DOA();
         PreparedStatement myStmt = doa.connection.prepareStatement("ALTER TABLE meal_table RENAME TO " + "`" + mealNameTextField.getText() + "`");
@@ -82,8 +108,5 @@ public class newMealWindowController extends MainController {
         selectedAliments.getItems().clear();
         mealNameTextField.clear();
         refresh();
-    }
-
-    public void deleteAliment() {
     }
 }
