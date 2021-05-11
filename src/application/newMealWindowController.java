@@ -1,6 +1,7 @@
 package application;
 
 import application.domain.Aliment;
+import application.domain.MealModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
 import java.sql.*;
+import java.util.Locale;
 
 public class newMealWindowController extends MainController {
 
@@ -102,11 +104,36 @@ public class newMealWindowController extends MainController {
 
     public void finish() throws Exception {
         DOA doa = new DOA();
-        PreparedStatement myStmt = doa.connection.prepareStatement("ALTER TABLE meal_table RENAME TO " + "`" + mealNameTextField.getText() + "`");
+        String mealNameTextFieldText = mealNameTextField.getText();
+        PreparedStatement myStmt = doa.connection.prepareStatement("INSERT INTO MEALS (name) values (?);", Statement.RETURN_GENERATED_KEYS);
+        myStmt.setString(1,mealNameTextFieldText);
         myStmt.execute();
+        ResultSet generatedKeys = myStmt.getGeneratedKeys();
+        generatedKeys.next();
+        int id = generatedKeys.getInt(1);
 
+
+
+        for (Aliment aliment : selectedAliments.getItems()) {
+            PreparedStatement insertAliment = doa.connection.prepareStatement("INSERT INTO meal_aliments " +
+                    "(aliment_id, meal_id, weight, calories, fat, carbs, protein, fiber) values(?, ?, ?, ?, ?, ?, ?, ?)");
+           insertAliment.setInt(1,aliment.getId());
+           insertAliment.setInt(2, id);
+           insertAliment.setDouble(3, aliment.getWeight());
+           insertAliment.setDouble(4, aliment.getCalories());
+           insertAliment.setDouble(5, aliment.getFat());
+           insertAliment.setDouble(6, aliment.getCarbohydrate());
+           insertAliment.setDouble(7, aliment.getProtein());
+           insertAliment.setDouble(8, aliment.getFiber());
+           insertAliment.executeUpdate();
+
+
+        }
         selectedAliments.getItems().clear();
         mealNameTextField.clear();
         refresh();
+
     }
+
+
 }

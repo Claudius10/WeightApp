@@ -7,9 +7,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="newMealPane" prefHeight="229.0" prefWidth="328.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.newMealWindowController">
+<AnchorPane fx:id="newMealPane" prefHeight="286.0" prefWidth="328.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.newMealWindowController">
    <ToolBar prefHeight="31.0" prefWidth="328.0">
       <Label alignment="CENTER" text="New meal" translateX="130.0">
          <font>
@@ -17,16 +18,21 @@
          </font>
       </Label>
    </ToolBar>
-   <TextField fx:id="alimentWeight" layoutX="165.0" layoutY="45.0" prefHeight="12.0" prefWidth="45.0" />
-   <ComboBox fx:id="alimentComboBox" layoutX="10.0" layoutY="45.0" prefHeight="25.0" prefWidth="146.0" />
-   <ListView fx:id="selectedAliments" layoutX="10.0" layoutY="77.0" prefHeight="86.0" prefWidth="308.0" />
+   <TextField fx:id="alimentWeight" layoutX="165.0" layoutY="45.0" prefHeight="12.0" prefWidth="45.0" promptText="g" />
+   <ComboBox fx:id="alimentComboBox" layoutX="10.0" layoutY="45.0" prefHeight="25.0" prefWidth="146.0" promptText="Select aliment" />
+   <ListView fx:id="selectedAliments" layoutX="10.0" layoutY="77.0" prefHeight="130.0" prefWidth="308.0" />
    <Button fx:id="addAlimentToMeal" layoutX="219.0" layoutY="45.0" mnemonicParsing="false" onAction="#addAliment" text="Add" />
-   <Button fx:id="deleteAlimentFromMeal" layoutX="266.0" layoutY="45.0" mnemonicParsing="false" text="Delete" />
-   <Label fx:id="mealCalories" layoutX="156.0" layoutY="172.0" text="Calories: 200" />
-   <Label fx:id="mealFat" layoutX="14.0" layoutY="172.0" text="Fat: 15g" />
-   <Label fx:id="mealCarbs" layoutX="14.0" layoutY="195.0" text="Carbs: 50g" />
-   <Label fx:id="mealProtein" layoutX="83.0" layoutY="172.0" text="Protein 20g" />
-   <Label fx:id="mealFiber" layoutX="83.0" layoutY="195.0" text="Fiber: 8g" />
-   <Button fx:id="mealFinishButton" layoutX="266.0" layoutY="195.0" mnemonicParsing="false" onAction="#finish" text="Finish" />
-   <TextField fx:id="mealNameTextField" layoutX="156.0" layoutY="195.0" prefHeight="25.0" prefWidth="102.0" />
+   <Button fx:id="deleteAlimentFromMeal" layoutX="266.0" layoutY="45.0" mnemonicParsing="false" onAction="#deleteAlimentFromMeal" text="Delete" />
+   <Button fx:id="mealFinishButton" layoutX="268.0" layoutY="246.0" mnemonicParsing="false" onAction="#finish" text="Finish" />
+   <TextField fx:id="mealNameTextField" layoutX="215.0" layoutY="215.0" prefHeight="25.0" prefWidth="102.0" promptText="Meal name" />
+   <VBox layoutX="14.0" layoutY="215.0" spacing="5.0">
+      <Label fx:id="totalFat" text="Fat:" />
+      <Label fx:id="totalCarbs" text="Carbs:" />
+      <Label fx:id="totalProtein" text="Protein:" />
+   </VBox>
+   <VBox layoutX="83.0" layoutY="215.0" spacing="5.0">
+      <Label fx:id="totalKcal" text="Calories:" />
+      <Label fx:id="totalWeight" text="Weight: " />
+      <Label fx:id="totalFiber" text="Fiber:" />
+   </VBox>
 </AnchorPane>

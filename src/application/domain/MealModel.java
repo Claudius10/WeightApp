@@ -7,10 +7,15 @@ public class MealModel {
 
     private String mealName;
     ObservableList<Aliment> alimentList;
+    private int id;
 
     public MealModel(String name) {
         this.mealName = name;
         this.alimentList = FXCollections.observableArrayList();
+    }
+
+    public void setMealName(String name) {
+        this.mealName = name;
     }
 
     public void add(Aliment aliment) {
@@ -21,6 +26,12 @@ public class MealModel {
        return this.alimentList;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+    public int getId() {
+       return this.id;
+    }
     public String getName() {
         return this.mealName;
     }

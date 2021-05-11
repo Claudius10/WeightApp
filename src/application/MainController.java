@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
 import java.io.*;
 import java.sql.*;
 
@@ -75,6 +76,7 @@ public class MainController {
 
         setMeals();
 
+
         mealsTreeTableView.setRoot(rootTreeItem);
         mealsTreeTableView.setShowRoot(false);
     }
@@ -88,10 +90,9 @@ public class MainController {
     public void deleteMeal() throws Exception {
         TreeItem<Object> selectedMeal = mealsTreeTableView.getSelectionModel().getSelectedItem();
         MealModel meal = (MealModel) selectedMeal.getValue();
-        String mealName = meal.getName();
 
         DOA doa = new DOA();
-        PreparedStatement myStmt = doa.connection.prepareStatement("DROP TABLE " + mealName);
+        PreparedStatement myStmt = doa.connection.prepareStatement("delete from meals where id=" + meal.getId());
         myStmt.execute();
 
         selectedMeal.getParent().getChildren().remove(selectedMeal);
@@ -109,26 +110,27 @@ public class MainController {
     }
 
     public void getMealsFromDB(Meal mealsDB) throws Exception {
+
+
         DOA doa = new DOA();
-        DatabaseMetaData md = doa.connection.getMetaData();
-        String[] types = {"TABLE"};
-        ResultSet rs = md.getTables(null, null, "%", types);
-        while (rs.next()) {
-            String name = rs.getString("TABLE_NAME");
-            //bug: meal duplicates in meals FIXED
-            //bug 2: can't get meal names that have spaces in them
-            if (!name.equals("aliments") && !meals.getMealNames().contains(name)) {
-                MealModel meal = new MealModel(name);
-                getAlimentsFromDBForMeal(meal);
-                mealsDB.add(meal);
-            }
+        Statement myStmt = doa.connection.createStatement();
+        ResultSet myRs = myStmt.executeQuery("select * from meals");
+
+        while (myRs.next()) {
+            String name = myRs.getString("name");
+            int id = myRs.getInt("id");
+            MealModel meal = new MealModel(name);
+            meal.setId(id);
+            getAlimentsFromDBForMeal(meal);
+            mealsDB.add(meal);
         }
+        // }
     }
 
     public void getAlimentsFromDBForMeal(MealModel meal) throws Exception {
         DOA doa = new DOA();
         Statement myStmt = doa.connection.createStatement();
-        ResultSet myRs = myStmt.executeQuery("select * from " + meal.getName());
+        ResultSet myRs = myStmt.executeQuery("select meal_aliments.*,aliments.aliment_name from meal_aliments left join aliments on aliments.id = meal_aliments.aliment_id where meal_aliments.meal_id="+meal.getId());
 
         while (myRs.next()) {
             int id = myRs.getInt("id");
